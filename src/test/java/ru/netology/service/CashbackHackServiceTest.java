@@ -1,27 +1,21 @@
 package ru.netology.service;
 
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class CashbackHackServiceTest {
 
     private final CashbackHackService service = new CashbackHackService();
 
-    @DataProvider(name = "amounts")
-    public Object[][] amounts() {
-        return new Object[][] {
-                { 0,    1000 },  // корректное поведение: 0 -> 1000 (подсказка – докупить на 1000)
-                { 1500, 500  },
-                { 1100, 900  },
-                { 999,  1    },
-                { 1000, 0    }   // ожидается 0, но сервис возвращает 1000 → тест упадёт
-        };
-    }
+    @Test
+    public void shouldReturnCorrectRemain() {
 
-    @Test(dataProvider = "amounts")
-    public void shouldReturnCorrectRemain(int amount, int expected) {
-        int actual = service.remain(amount);
-        Assert.assertEquals(actual, expected, "Ошибка при amount = " + amount);
+        Assert.assertEquals("Ошибка при amount = 0", 1000, service.remain(0));
+        Assert.assertEquals("Ошибка при amount = 1500", 500, service.remain(1500));
+        Assert.assertEquals("Ошибка при amount = 1100", 900, service.remain(1100));
+        Assert.assertEquals("Ошибка при amount = 999", 1, service.remain(999));
+
+
+        Assert.assertEquals("Ошибка при amount = 1000", 0, service.remain(1000));
     }
 }
